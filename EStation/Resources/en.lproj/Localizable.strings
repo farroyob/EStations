@@ -1,0 +1,24 @@
+/* 
+  Localizable.strings
+  EStation
+
+  Created by Freddy A. on 10/13/21.
+  
+*/
+
+"homeSelectCCAA" = "Select a CCAA";
+"homeSelectProvince" = "Select a Province";
+"homeSelectProduct" = "Select a Product";
+"homeSelectGo" = "Show gas stations!";
+"homeSectionCCAA" = "Regions";
+"homeSectionGo" = "Go";
+"homeSectionProduct" = "Product";
+"ListCCAA" = "CCAAs";
+"ListProvince" = "Provinces";
+"ListProducts" = "Products";
+"ListGo" = "GO";
+"GoPrice" = "Price: ";
+"GoLabel" = "Label: ";
+"GoTimeTable" = "Schedule: ";
+"GoMunicipality" = "Municipality: ";
+"GoLoc" = "Place: ";

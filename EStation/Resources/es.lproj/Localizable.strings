@@ -1,0 +1,24 @@
+/* 
+  Localizable.strings
+  EStation
+
+  Created by Freddy A. on 10/13/21.
+  
+*/
+
+"homeSelectCCAA" = "Seleccione una Comunidad Autónoma";
+"homeSelectProvince" = "Seleccione una Provincia";
+"homeSelectProduct" = "Seleccione un Producto";
+"homeSelectGo" = "Mostrar Gasolineras!";
+"homeSectionCCAA" = "Regiones";
+"homeSectionGo" = "Gasolineras";
+"homeSectionProduct" = "Producto";
+"ListCCAA" = "Comunidad autónoma";
+"ListProvince" = "Provincias";
+"ListProducts" = "Productos";
+"ListGo" = "Gasolineras";
+"GoPrice" = "Precio: ";
+"GoLabel" = "Rótulo: ";
+"GoTimeTable" = "Horario: ";
+"GoMunicipality" = "Municipio: ";
+"GoLoc" = "Localidad: ";

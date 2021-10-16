@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="21A5506j" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDCCAA" representedClassName="CDCCAA" syncable="YES" codeGenerationType="class">
+        <attribute name="ccaaName" optional="YES" attributeType="String"/>
+        <attribute name="idCCAA" optional="YES" attributeType="String"/>
+        <relationship name="contains" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDProvince" inverseName="belongs" inverseEntity="CDProvince"/>
+    </entity>
+    <entity name="CDGo" representedClassName="CDGo" syncable="YES" codeGenerationType="class">
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="idGo" optional="YES" attributeType="String"/>
+        <attribute name="idProduct" optional="YES" attributeType="String"/>
+        <attribute name="idProvince" optional="YES" attributeType="String"/>
+        <attribute name="label" optional="YES" attributeType="String"/>
+        <attribute name="municipality" optional="YES" attributeType="String"/>
+        <attribute name="place" optional="YES" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="timetable" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDProduct" representedClassName="CDProduct" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="shortName" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDProvince" representedClassName="CDProvince" syncable="YES" codeGenerationType="class">
+        <attribute name="idProvince" optional="YES" attributeType="String"/>
+        <attribute name="provinceImage" optional="YES" attributeType="String"/>
+        <attribute name="provinceName" optional="YES" attributeType="String"/>
+        <relationship name="belongs" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCCAA" inverseName="contains" inverseEntity="CDCCAA"/>
+    </entity>
+    <elements>
+        <element name="CDCCAA" positionX="-63" positionY="-18" width="128" height="74"/>
+        <element name="CDGo" positionX="-45" positionY="36" width="128" height="164"/>
+        <element name="CDProduct" positionX="-54" positionY="27" width="128" height="74"/>
+        <element name="CDProvince" positionX="-63" positionY="0" width="128" height="89"/>
+    </elements>
+</model>
