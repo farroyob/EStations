@@ -19,6 +19,4 @@ Estudiante Freddy Arroyo de Costa Rica
 
 ##### Video
 
-[![Watch the video](https://github.com/farroyob/EStations/blob/main/Archivos/IconBase.png)](https://youtu.be/6kkpISpkqsQ)
-
-[![Demo](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://youtu.be/6kkpISpkqsQ)
+[![Watch the video](https://github.com/farroyob/EStations/blob/main/Archivos/yb.png)](https://youtu.be/6kkpISpkqsQ)
