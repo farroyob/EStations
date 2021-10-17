@@ -22,7 +22,7 @@ struct CCAAListView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
-            .navigationBarBackButtonHidden(true)
+            .navigationBarBackButtonHidden(false)
             .navigationTitle("ListCCAA")
             .edgesIgnoringSafeArea(.top)
             

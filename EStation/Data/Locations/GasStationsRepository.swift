@@ -32,7 +32,6 @@ struct GasStationsRepository {
     }
 }
 
-
 extension GasStationsRepository: GasStationsRepositoryType {
     func getSimulatenous() -> AnyPublisher<[DomainCCAA], Error>  {
         let localCCAAs = localDataSource.getCCAA()
@@ -44,6 +43,10 @@ extension GasStationsRepository: GasStationsRepositoryType {
         
         return result
     }
+    
+    //******************************************************************************************************************
+    // COMUNIDAD AUTONOMAS
+    //******************************************************************************************************************
     
     func getCCAA() -> AnyPublisher<[DomainCCAA], Error> {
         let retrievedCCAAs = localDataSource.getCCAA()
@@ -72,6 +75,14 @@ extension GasStationsRepository: GasStationsRepositoryType {
         
         return result
     }
+    
+    func deleteAllCCAAs() -> AnyPublisher<Int, Error> {
+        localDataSource.deleteAllCCAAs()
+    }
+    
+    //******************************************************************************************************************
+    // PROVINCIAS
+    //******************************************************************************************************************
     
     func deleteAllProvinces() -> AnyPublisher<Int, Error> {
         localDataSource.deleteAllProvinces()
@@ -106,9 +117,9 @@ extension GasStationsRepository: GasStationsRepositoryType {
         return result
     }
     
-    func deleteAllCCAAs() -> AnyPublisher<Int, Error> {
-        localDataSource.deleteAllCCAAs()
-    }
+    //******************************************************************************************************************
+    // PRODUCTOS
+    //******************************************************************************************************************
     
     func getProducts() -> AnyPublisher<[DomainProduct], Error> {
         let retrieved = localDataSource.productGet()
@@ -140,9 +151,17 @@ extension GasStationsRepository: GasStationsRepositoryType {
         return result
     }
     
+    //******************************************************************************************************************
+    // GASOLINERAS
+    //******************************************************************************************************************
+    
     func getGasStations(idProvince: String,
                         idProduct: String) -> AnyPublisher<[DomainGasStation], Error> {
         
+        // Primero se borran los registros de la Provincia / Producto que tengan mas de 30 min
+        let _ = localDataSource.goDelete(idProvince: idProvince, idProduct: idProduct)
+        
+        // Despues se verifica si existen datos locales vigentes
         let retrieved = localDataSource.goGet(idProvince: idProvince, idProduct: idProduct)
         
         let checked = retrieved
@@ -153,7 +172,7 @@ extension GasStationsRepository: GasStationsRepositoryType {
                     print("GasStationsRepository going to fetch all Products from the API")
                     return apiClient.getGasStations(idProvince: idProvince, idProduct: idProduct)
                         .flatMap {
-                            return localDataSource.goSave(list: $0.elements, idProvince: idProvince, idProduct: idProduct)
+                            return localDataSource.goSave(list: $0.elements, idProvince: idProvince, idProduct: idProduct, dateCall: $0.date)
                         }
                         .eraseToAnyPublisher()
                 } else {
@@ -163,8 +182,6 @@ extension GasStationsRepository: GasStationsRepositoryType {
                     .eraseToAnyPublisher()
                 }
             }
-        
-        print(checked)
         
         let result = checked.compactMap { $0.map { DomainGasStation(gasStation: $0) } }
             .eraseToAnyPublisher()

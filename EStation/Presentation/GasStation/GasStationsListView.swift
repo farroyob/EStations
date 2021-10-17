@@ -21,7 +21,7 @@ struct GasStationsListView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
-            .navigationBarBackButtonHidden(true)
+            .navigationBarBackButtonHidden(false)
             .navigationTitle("ListGo")
             .edgesIgnoringSafeArea(.top)
         }

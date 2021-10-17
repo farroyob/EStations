@@ -22,7 +22,7 @@ protocol GasStationsLocalDataSourceType {
     func productDeleteAll() -> AnyPublisher<Int, Error>
      
     func goGet(idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error>
-    func goSave(list: [GasStation], idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error>
+    func goSave(list: [GasStation], idProvince: String, idProduct: String, dateCall: String) -> AnyPublisher<[GasStation], Error>
     func goDelete(idProvince: String, idProduct: String) -> AnyPublisher<Int, Error>
     func goDeleteAll() -> AnyPublisher<Int, Error>
 }
@@ -36,74 +36,143 @@ struct GasStationsLocalDataSource {
 }
 
 extension GasStationsLocalDataSource: GasStationsLocalDataSourceType {
+    //******************************************************************************************************************
+    // COMUNIDAD AUTONOMA
+    //******************************************************************************************************************
+    
     func getCCAA() -> AnyPublisher<[CCAA], Error> {
-        print("GasStationsLocalDataSource going to GET all CCAAs from local data source")
         return persistenceController.getCCAA()
     }
     
     func save(ccaaList: [CCAA]) -> AnyPublisher<[CCAA], Error> {
-        print("GasStationsLocalDataSource going to SAVE \(ccaaList.count) CCAAs")
         return persistenceController.save(ccaaList: ccaaList)
     }
     
     func deleteAllCCAAs() -> AnyPublisher<Int, Error> {
-        print("GasStationsLocalDataSource going to DELETE ALL CCAAs")
         return persistenceController.deleteAllCCAAs()
     }
     
-    
-    
+    //******************************************************************************************************************
+    // PROVINCIAS
+    //******************************************************************************************************************
     
     func getProvinces(idCCAA: String?) -> AnyPublisher<[Province], Error> {
-        print("GasStationsLocalDataSource going to GET PROVINCES from local data source")
         return persistenceController.getProvinces(idCCAA: idCCAA)
     }
     
     func save(provincesList: [Province]) -> AnyPublisher<[Province], Error> {
-        print("GasStationsLocalDataSource going to persist \(provincesList.count) elements")
         return persistenceController.save(provincesList: provincesList)
     }
     
     func deleteAllProvinces() -> AnyPublisher<Int, Error> {
-        print("GasStationsLocalDataSource going to DELETE ALL PROVINCES")
         return persistenceController.deleteAllProvinces()
     }
     
-  
+    //******************************************************************************************************************
+    // PRODUCTOS
+    //******************************************************************************************************************
     
     func productGet() -> AnyPublisher<[Product], Error> {
-        print("GasStationsLocalDataSource going to GET all Produtcs from local data source")
         return persistenceController.productGet()
     }
     
     func productSave(list: [Product]) -> AnyPublisher<[Product], Error> {
-        print("GasStationsLocalDataSource going to SAVE \(list.count) CCAAs")
         return persistenceController.productSave(list: list)
     }
     
     func productDeleteAll() -> AnyPublisher<Int, Error> {
-        print("GasStationsLocalDataSource going to DELETE ALL CCAAs")
         return persistenceController.productDeleteAll()
     }
     
+    //******************************************************************************************************************
+    // GASOLINERAS
+    //******************************************************************************************************************
+    
     func goGet(idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error> {
+        let dateInt: Int
+        
+        dateInt = getDateMinutesCurrent()
+        
         print("GasStationsLocalDataSource going to GET all GoS from local data source")
-        return persistenceController.goGet(idProvince: idProvince, idProduct: idProduct)
+        
+        return persistenceController.goGet(idProvince: idProvince, idProduct: idProduct, dateInt: dateInt)
     }
     
-    func goSave(list: [GasStation], idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error> {
-        print("GasStationsLocalDataSource going to SAVE \(list.count) GoS")
-        return persistenceController.goSave(list: list, idProvince: idProvince, idProduct: idProduct)
+    func goSave(list: [GasStation], idProvince: String, idProduct: String, dateCall: String) -> AnyPublisher<[GasStation], Error> {
+        let dateInt: Int
+        
+        dateInt = getDateMinutes(dateString: dateCall)
+        
+        return persistenceController.goSave(list: list, idProvince: idProvince, idProduct: idProduct, dateInt: dateInt)
     }
     
     func goDelete(idProvince: String, idProduct: String) -> AnyPublisher<Int, Error> {
+        let dateInt: Int
+        
+        dateInt = getDateMinutesCurrent()
+        
         print("GasStationsLocalDataSource going to DELETE (Province & Product) GoS")
-        return persistenceController.goDelete(idProvince: idProvince, idProduct: idProduct)
+        return persistenceController.goDelete(idProvince: idProvince, idProduct: idProduct, dateInt: dateInt)
     }
     
     func goDeleteAll() -> AnyPublisher<Int, Error> {
         print("GasStationsLocalDataSource going to DELETE ALL GoS")
         return persistenceController.goDeleteAll()
+    }
+    
+    //******************************************************************************************************************
+    // FUNCIONES
+    //******************************************************************************************************************
+    
+    func getDateMinutes(dateString: String) -> Int {
+        let dateFormatter = DateFormatter()
+        let calendar = Calendar.current
+        
+        var dateQuery: Date
+        var year: Int
+        var month: Int
+        var day: Int
+        var hour: Int
+        var minutes: Int
+        
+        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        
+        if let date = dateFormatter.date(from:dateString) {
+            dateQuery = date
+        } else {
+            dateQuery = Date()
+        }
+        
+        year = calendar.component(.year, from: dateQuery)
+        month = calendar.component(.month, from: dateQuery)
+        day = calendar.component(.day, from: dateQuery)
+        
+        hour = calendar.component(.hour, from: dateQuery)
+        minutes = calendar.component(.minute, from: dateQuery)
+        
+        return (year * 525600) + (month * 43800) + (day * 1440) + (hour * 60) + (minutes + 30)
+    }
+    
+    func getDateMinutesCurrent() -> Int {
+        let calendar = Calendar.current
+        
+        var dateQuery: Date
+        var year: Int
+        var month: Int
+        var day: Int
+        var hour: Int
+        var minutes: Int
+        
+        dateQuery = Date()
+        
+        year = calendar.component(.year, from: dateQuery)
+        month = calendar.component(.month, from: dateQuery)
+        day = calendar.component(.day, from: dateQuery)
+        
+        hour = calendar.component(.hour, from: dateQuery)
+        minutes = calendar.component(.minute, from: dateQuery)
+        
+        return (year * 525600) + (month * 43800) + (day * 1440) + (hour * 60) + (minutes)
     }
 }
 

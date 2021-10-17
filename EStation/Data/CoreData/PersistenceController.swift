@@ -22,9 +22,9 @@ protocol PersistenceControllerType {
     func productSave(list: [Product]) -> AnyPublisher<[Product], Error>
     func productDeleteAll() -> AnyPublisher<Int, Error>
     
-    func goGet(idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error>
-    func goSave(list: [GasStation], idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error>
-    func goDelete(idProvince: String, idProduct: String) -> AnyPublisher<Int, Error>
+    func goGet(idProvince: String, idProduct: String, dateInt: Int) -> AnyPublisher<[GasStation], Error>
+    func goSave(list: [GasStation], idProvince: String, idProduct: String, dateInt: Int) -> AnyPublisher<[GasStation], Error>
+    func goDelete(idProvince: String, idProduct: String, dateInt: Int) -> AnyPublisher<Int, Error>
     func goDeleteAll() -> AnyPublisher<Int, Error>
 }
 
@@ -353,12 +353,12 @@ extension PersistenceController: PersistenceControllerType {
     // GO
     //******************************************************************************************************************
     
-    func goGet(idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error> {
+    func goGet(idProvince: String, idProduct: String, dateInt: Int) -> AnyPublisher<[GasStation], Error> {
         return Future<[GasStation], Error>() { promise in
             container.performBackgroundTask { context in
                 let fetchRequest = CDGo.fetchRequest()
                 //fetchRequest.predicate = NSPredicate(format: "idProvince like %@ AND idProduct like %@", idProvince )
-                fetchRequest.predicate = NSPredicate(format: "idProvince like %@ AND idProduct like %@", argumentArray: [idProvince, idProduct])
+                fetchRequest.predicate = NSPredicate(format: "idProvince like %@ AND idProduct like %@ AND dateInt >= %@", argumentArray: [idProvince, idProduct, dateInt])
                 
                 var result: [CDGo]?
                 do {
@@ -378,13 +378,14 @@ extension PersistenceController: PersistenceControllerType {
         .eraseToAnyPublisher()
     }
     
-    func goSave(list: [GasStation], idProvince: String, idProduct: String) -> AnyPublisher<[GasStation], Error> {
+    func goSave(list: [GasStation], idProvince: String, idProduct: String, dateInt: Int) -> AnyPublisher<[GasStation], Error> {
         return Future<[GasStation], Error>() { promise in
             container.performBackgroundTask { context in
                 list.forEach { data in
                     let newEntry = CDGo(context: context)
                     newEntry.idProvince = idProvince
                     newEntry.idProduct = idProduct
+                    newEntry.dateInt = Int32(dateInt)
                     newEntry.price = data.price
                     newEntry.timetable = data.timetable
                     newEntry.municipality = data.municipality
@@ -406,12 +407,12 @@ extension PersistenceController: PersistenceControllerType {
         .eraseToAnyPublisher()
     }
     
-    func goDelete(idProvince: String, idProduct: String) -> AnyPublisher<Int, Error> {
+    func goDelete(idProvince: String, idProduct: String, dateInt: Int) -> AnyPublisher<Int, Error> {
         return Future<Int, Error>() { promise in
             container.performBackgroundTask { context in
                 
-                let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CDProduct.fetchRequest()
-                fetchRequest.predicate = NSPredicate(format: "idProvince like %@ AND idProduct like %@", argumentArray: [idProvince, idProduct])
+                let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CDGo.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "idProvince like %@ AND idProduct like %@ AND dateInt < %@", argumentArray: [idProvince, idProduct, dateInt])
                 
                 let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
                 deleteRequest.resultType = .resultTypeObjectIDs

@@ -9,7 +9,15 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel = HomeViewModel()
-    //@ObservedObject var timerManager = TimerManager()
+    @ObservedObject var timerManager = TimerManager()
+    
+    //@State var timeRemaining = 10
+    //@State var currentDate = Date()
+    //let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    // No supe llamar a los metodos por medio de un timer para que actulizaran la DB
+    // de forma automatica solo se realiza al realizar la llamada al metodo que verifica
+    // que haya pasado mas de 30 minutos para realizar el borrado y actualizan de los datos
         
     var body: some View {
         VStack{
@@ -22,6 +30,22 @@ struct HomeView: View {
             .padding()
             .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
             .background(Color("clAction"))
+            
+            /*
+            Text("\(currentDate)")
+                .onReceive(timer) { input in
+                    currentDate = input
+                }
+            
+            Text("\(timeRemaining)")
+                .onReceive(timer) { _ in
+                    if timeRemaining > 0 {
+                        timeRemaining -= 1
+                        
+                        //viewModel.getGasStations(idProvince: "idProvince", idProduct: "idProduct")
+                    }
+                }
+             */
             
             NavigationView {
                 List {
@@ -74,7 +98,11 @@ struct HomeView: View {
         .background(Color("clAction"))
         .ignoresSafeArea(.all, edges: .top)
         .edgesIgnoringSafeArea(.top)
-        .accentColor(.white)
+        .accentColor(.black)
+        
+        .onAppear{
+            timerManager.start()
+        }
     }
 }
 

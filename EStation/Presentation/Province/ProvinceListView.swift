@@ -21,7 +21,7 @@ struct ProvinceListView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
-            .navigationBarBackButtonHidden(true)
+            .navigationBarBackButtonHidden(false)
             .navigationTitle("ListProvince")
             .edgesIgnoringSafeArea(.top)
         }

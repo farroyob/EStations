@@ -21,7 +21,7 @@ struct ProductsListView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
-            .navigationBarBackButtonHidden(true)
+            .navigationBarBackButtonHidden(false)
             .navigationTitle("ListProducts")
             .edgesIgnoringSafeArea(.top)
             .listRowBackground(Color.clear)

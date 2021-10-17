@@ -12,9 +12,7 @@ protocol GasStationsAPIClientType {
     func getProducts() -> AnyPublisher<[Product], Error>
     func getCCAA() -> AnyPublisher<[CCAA], Error>
     func getProvinces(idCCAA: String?) -> AnyPublisher<[Province], Error>
-    //func getGasStations(idCCAA: String, idProduct: String) -> AnyPublisher<GasPrices, Error>
     func getGasStations(idProvince: String, idProduct: String) -> AnyPublisher<GasPrices, Error>
-    //func getGasStations(idMunicipality: String, idProduct: String) -> AnyPublisher<GasPrices, Error>
 }
 
 final class GasStationsAPIClient: BaseAPIClient {
@@ -33,31 +31,36 @@ final class GasStationsAPIClient: BaseAPIClient {
 }
 
 extension GasStationsAPIClient: GasStationsAPIClientType {
+    //******************************************************************************************************************
+    // PRODUCTS
+    //******************************************************************************************************************
+    
     func getProducts() -> AnyPublisher<[Product], Error> {
         execute(GasStationLocationEndpoint.getProducts)
     }
+    
+    //******************************************************************************************************************
+    // COMUNIDAD AUTONOMA
+    //******************************************************************************************************************
     
     func getCCAA() -> AnyPublisher<[CCAA], Error> {
         execute(GasStationLocationEndpoint.getCCAA)
     }
     
+    //******************************************************************************************************************
+    // PROVINCIAS
+    //******************************************************************************************************************
+    
     func getProvinces(idCCAA: String?) -> AnyPublisher<[Province], Error> {
         execute(GasStationLocationEndpoint.getProvinces(idCCAA: idCCAA))
     }
     
-    /*
-    func getGasStations(idCCAA: String, idProduct: String) -> AnyPublisher<GasPrices, Error> {
-        execute(GasStationLocationEndpoint.getGasStations(idCCAA: idCCAA, idProduct: idProduct))
-    }
-     */
+    //******************************************************************************************************************
+    // GASOLINERAS
+    //******************************************************************************************************************
     
     func getGasStations(idProvince: String, idProduct: String) -> AnyPublisher<GasPrices, Error> {
         execute(GasStationLocationEndpoint.getGasStations(idProvince: idProvince, idProduct: idProduct))
     }
     
-    /*
-    func getGasStations(idMunicipality: String, idProduct: String) -> AnyPublisher<GasPrices, Error> {
-        execute(GasStationLocationEndpoint.getGasStations(idMunicipality: idMunicipality, idProduct: idProduct))
-    }
-     */
 }
